@@ -5,14 +5,17 @@ import "CoreLibs/timer"
 
 local gfx <const> = playdate.graphics
 local spritelib <const> = gfx.sprite
-local screenWidth <const> = playdate.display.getWidth()
-local screenHeight <const> = playdate.display.getHeight()
+local halfScreenWidth <const> = playdate.display.getWidth() / 2
+local halfScreenHeight <const> = playdate.display.getHeight() / 2
+local tau <const> =  math.pi * 2
 
 class("Planet").extends(spritelib)
 
 function Planet:init()
 	Planet.super.init(self)
-	self.time = 0
+	self:setRadius(0)
+	self:setRevolution(0)
+	self:setDays(0)
 end
 
 function Planet:setRadius(rad)
@@ -23,12 +26,14 @@ function Planet:setRevolution(rev)
 	self.revolution = rev
 end
 
+function Planet:setDays(ds)
+	self.days = ds
+end
+
 function Planet:draw()
-	local x = screenWidth / 2 + math.sin(self.time / self.revolution) * self.radius
-	local y = screenHeight / 2 - math.cos(self.time / self.revolution) * self.radius
+	local x = halfScreenWidth + math.sin(self.days / self.revolution * tau) * self.radius
+	local y = halfScreenHeight - math.cos(self.days / self.revolution * tau) * self.radius
 	
-	gfx.drawCircleAtPoint(screenWidth / 2, screenHeight / 2, self.radius)
+	gfx.drawCircleAtPoint(halfScreenWidth, halfScreenHeight, self.radius)
 	gfx.fillCircleAtPoint(x, y, 5)
-	
-	self.time += 10
 end
