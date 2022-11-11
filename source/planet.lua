@@ -9,6 +9,7 @@ local halfScreenWidth <const> = playdate.display.getWidth() / 2
 local halfScreenHeight <const> = playdate.display.getHeight() / 2
 local tau <const> =  math.pi * 2
 
+-- Extending from sprite even though we're not really using sprites
 class("Planet").extends(spritelib)
 
 function Planet:init()
@@ -34,6 +35,8 @@ function Planet:draw()
 	local x = halfScreenWidth + math.sin(self.days / self.revolution * tau) * self.radius
 	local y = halfScreenHeight - math.cos(self.days / self.revolution * tau) * self.radius
 	
+	-- Drawing the orbit
 	gfx.drawCircleAtPoint(halfScreenWidth, halfScreenHeight, self.radius)
-	gfx.fillCircleAtPoint(x, y, 5)
+	-- Drawing planet (black circle)
+	gfx.fillCircleAtPoint(x, y, 6)
 end

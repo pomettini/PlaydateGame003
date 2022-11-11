@@ -59,6 +59,7 @@ function playdate.update()
 	
 	-- playdate.drawFPS(0, 0)
 	
+	-- One crank spin = earth rotation around the sun
 	currentDay += playdate.getCrankTicks(365.26)
 	
 	for i, planet in ipairs(planets) do
