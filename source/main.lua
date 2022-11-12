@@ -18,7 +18,8 @@ local planets = {}
 local currentPlanetId = 3
 local currentDay = 0
 local scaleFactor = 12
-local autoPlaySpeed = 0
+local autoPlay = false
+local showUI = true
 
 local mercury = Planet()
 mercury:setName("Mercury")
@@ -61,34 +62,34 @@ neptune:setRevolution(60189.5475)
 table.insert(planets, neptune)
 
 function drawCurrentDayText()
-	local x = screenWidth - margin
-	local y = screenHeight - margin - textHeight
-	local text = "Day " .. currentDay
+	local x <const> = screenWidth - margin
+	local y <const> = screenHeight - margin - textHeight
+	local text <const> = "Day " .. currentDay
 	
 	-- Drawing text on bottom right
 	gfx.drawTextAligned(text, x, y, kTextAlignment.right)
 end
 
 function drawSelectedPlanetText()
-	local x = margin
-	local y = screenHeight - margin - textHeight
-	local planet = planets[currentPlanetId]
-	local name = planet:getName()
-	local rev = planet:getRevolutions()
+	local x <const> = margin
+	local y <const> = screenHeight - margin - textHeight
+	local planet <const> = planets[currentPlanetId]
+	local name <const> = planet:getName()
+	local rev <const> = planet:getRevolutions()
 	-- Rounding the revolutions to the last two decimal places
-	local text = name .. " " .. string.format("%.2f", rev) .. " orbits"
+	local text <const> = name .. " " .. string.format("%.2f", rev) .. " orbits"
 	
 	-- Drawing text on bottom left
 	gfx.drawTextAligned(text, x, y, kTextAlignment.left)
 end
 
-function drawAutoPlaySpeedText()
+function drawAutoPlayText()
 	-- Text is displayed only if autoplay is active
-	if autoPlaySpeed == 0 then return end
+	if not autoPlay then return end
 	
-	local x = screenWidth - margin
-	local y = margin
-	local text = "AutoCrank " .. autoPlaySpeed
+	local x <const> = screenWidth - margin
+	local y <const> = margin
+	local text <const> = "AutoCrank"
 	
 	-- Drawing text on top right
 	gfx.drawTextAligned(text, x, y, kTextAlignment.right)
@@ -101,7 +102,8 @@ function playdate.update()
 	
 	-- One crank spin = earth rotation around the sun
 	currentDay += playdate.getCrankTicks(365.26)
-	currentDay += autoPlaySpeed
+	-- With autoplay active every tick the day advances
+	if autoPlay then currentDay += 1 end
 	
 	for i, planet in ipairs(planets) do
 		local isSelected = currentPlanetId == i
@@ -112,9 +114,11 @@ function playdate.update()
 		planet:draw()
 	end
 	
-	drawSelectedPlanetText()
-	drawCurrentDayText()
-	drawAutoPlaySpeedText()
+	if showUI then
+		drawSelectedPlanetText()
+		drawCurrentDayText()
+		drawAutoPlayText()
+	end
 end
 
 function playdate.upButtonUp()
@@ -137,9 +141,9 @@ function playdate.rightButtonUp()
 end
 
 function playdate.AButtonUp()
-	autoPlaySpeed += 1
+	autoPlay = not autoPlay
 end
 
 function playdate.BButtonUp()
-	autoPlaySpeed -= 1
+	showUI = not showUI
 end

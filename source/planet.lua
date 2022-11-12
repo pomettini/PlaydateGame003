@@ -55,17 +55,19 @@ function Planet:getRevolutions()
 end
 
 function Planet:draw()
-	local x = halfScreenWidth + math.sin(self.days / self.revolution * tau) * self.radius
-	local y = halfScreenHeight - math.cos(self.days / self.revolution * tau) * self.radius
+	local scaleHalf <const> = self.scale / 2
+	local scaledDays <const> = self.days / self.revolution
+	local x <const> = halfScreenWidth + math.sin(scaledDays * tau) * self.radius
+	local y <const> = halfScreenHeight - math.cos(scaledDays * tau) * self.radius
 	-- Ternary operator in Lua
-	local color = self.selected and gfx.kColorWhite or gfx.kColorBlack
+	local color <const> = self.selected and gfx.kColorWhite or gfx.kColorBlack
 	
 	-- Drawing the orbit
 	gfx.drawCircleAtPoint(halfScreenWidth, halfScreenHeight, self.radius)
 	-- Drawing the inner part of the planet
 	gfx.setColor(color)
-	gfx.fillCircleAtPoint(x, y, self.scale / 2)
+	gfx.fillCircleAtPoint(x, y, scaleHalf)
 	-- Drawing the outer part of the planet
 	gfx.setColor(gfx.kColorBlack)
-	gfx.drawCircleAtPoint(x, y, self.scale / 2)
+	gfx.drawCircleAtPoint(x, y, scaleHalf)
 end
