@@ -12,5 +12,6 @@ Note: If while developing for the [Playdate](https://play.date/) you feel you're
 - Spin the **crank** to **advance the days**
 - Press **up** or **down** to **magnify** or **shrink** the solar system
 - Press **left** or **right** to **change planet** and display its **number of revolutions**
+- Press **b** or **a** to **decrease** or **increase** the **auto-crank**
 
 ![Screenshot of the game](screenshot.png)
