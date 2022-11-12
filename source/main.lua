@@ -10,10 +10,15 @@ local spritelib <const> = gfx.sprite
 local screenWidth <const> = playdate.display.getWidth()
 local screenHeight <const> = playdate.display.getHeight()
 
+-- Const values for UI
+local margin <const> = 15
+local textHeight <const> = 15
+
 local planets = {}
 local currentPlanetId = 3
 local currentDay = 0
-local scaleFactor = 13
+local scaleFactor = 12
+local autoPlaySpeed = 0
 
 local mercury = Planet()
 mercury:setName("Mercury")
@@ -56,23 +61,37 @@ neptune:setRevolution(60189.5475)
 table.insert(planets, neptune)
 
 function drawCurrentDayText()
-	local x = screenWidth - 10
-	local y = screenHeight - 25
+	local x = screenWidth - margin
+	local y = screenHeight - margin - textHeight
 	local text = "Day " .. currentDay
 	
+	-- Drawing text on bottom right
 	gfx.drawTextAligned(text, x, y, kTextAlignment.right)
 end
 
 function drawSelectedPlanetText()
-	local x = 10
-	local y = screenHeight - 25
+	local x = margin
+	local y = screenHeight - margin - textHeight
 	local planet = planets[currentPlanetId]
 	local name = planet:getName()
 	local rev = planet:getRevolutions()
 	-- Rounding the revolutions to the last two decimal places
 	local text = name .. " " .. string.format("%.2f", rev) .. " orbits"
 	
+	-- Drawing text on bottom left
 	gfx.drawTextAligned(text, x, y, kTextAlignment.left)
+end
+
+function drawAutoPlaySpeedText()
+	-- Text is displayed only if autoplay is active
+	if autoPlaySpeed == 0 then return end
+	
+	local x = screenWidth - margin
+	local y = margin
+	local text = "AutoCrank " .. autoPlaySpeed
+	
+	-- Drawing text on top right
+	gfx.drawTextAligned(text, x, y, kTextAlignment.right)
 end
 
 function playdate.update()
@@ -82,6 +101,7 @@ function playdate.update()
 	
 	-- One crank spin = earth rotation around the sun
 	currentDay += playdate.getCrankTicks(365.26)
+	currentDay += autoPlaySpeed
 	
 	for i, planet in ipairs(planets) do
 		local isSelected = currentPlanetId == i
@@ -94,6 +114,7 @@ function playdate.update()
 	
 	drawSelectedPlanetText()
 	drawCurrentDayText()
+	drawAutoPlaySpeedText()
 end
 
 function playdate.upButtonUp()
@@ -113,4 +134,12 @@ end
 function playdate.rightButtonUp()
 	-- If id is 9 it becomes 1 (last planet is 8)
 	currentPlanetId = currentPlanetId % #planets + 1
+end
+
+function playdate.AButtonUp()
+	autoPlaySpeed += 1
+end
+
+function playdate.BButtonUp()
+	autoPlaySpeed -= 1
 end

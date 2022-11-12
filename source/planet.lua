@@ -68,6 +68,4 @@ function Planet:draw()
 	-- Drawing the outer part of the planet
 	gfx.setColor(gfx.kColorBlack)
 	gfx.drawCircleAtPoint(x, y, self.scale / 2)
-	
-	self.selected = false
 end
