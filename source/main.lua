@@ -1,6 +1,5 @@
 import "CoreLibs/object"
 import "CoreLibs/graphics"
-import "CoreLibs/ui"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
 import "Corelibs/crank"
@@ -96,14 +95,10 @@ function drawAutoPlayText()
 	gfx.drawTextAligned(text, x, y, kTextAlignment.right)
 end
 
-playdate.ui.crankIndicator:start()
-
 function playdate.update()
 	gfx.clear()
 	
 	-- playdate.drawFPS(0, 0)
-	
-	playdate.ui.crankIndicator:update()
 	
 	-- One crank spin = earth rotation around the sun
 	currentDay += playdate.getCrankTicks(365.26)
