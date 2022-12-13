@@ -24,9 +24,9 @@ function Planet:init()
 	self:setSelected(false)
 	
 	self.synth = snd.synth.new(snd.kWaveTriangle)
-	self.synth:setDecay(0.5)
-	self.synth:setSustain(0.6)
-	self.synth:setRelease(1.0)
+	self.synth:setDecay(2)
+	self.synth:setSustain(0)
+	-- self.synth:setRelease(1.0)
 end
 
 function Planet:setName(name)
@@ -71,7 +71,7 @@ end
 
 function Planet:updateAudio()
 	if math.floor(self.days % self.revolution) == 0 then
-		self.synth:playNote(self.pitch, 0.5, 1)
+		self.synth:playNote(self.pitch, 0.5, 2)
 	end
 end
 
