@@ -6,6 +6,7 @@ import "Corelibs/crank"
 import "planet"
 
 local gfx <const> = playdate.graphics
+local snd <const> = playdate.sound
 local spritelib <const> = gfx.sprite
 local screenWidth <const> = playdate.display.getWidth()
 local screenHeight <const> = playdate.display.getHeight()
@@ -24,41 +25,49 @@ local showUI = true
 local mercury = Planet()
 mercury:setName("Mercury")
 mercury:setRevolution(87.97)
+mercury:setPitch("G5") -- 880
 table.insert(planets, mercury)
 
 local venus = Planet()
 venus:setName("Venus")
 venus:setRevolution(224.7)
+venus:setPitch("F5") -- 698.456
 table.insert(planets, venus)
 
 local earth = Planet()
 earth:setName("Earth")
 earth:setRevolution(365.26)
+earth:setPitch("D5") -- 587.33
 table.insert(planets, earth)
 
 local mars = Planet()
 mars:setName("Mars")
 mars:setRevolution(686.67)
+mars:setPitch("A5") -- 783.991
 table.insert(planets, mars)
 
 local jupiter = Planet()
 jupiter:setName("Jupiter")
 jupiter:setRevolution(4331.865)
+jupiter:setPitch("C4") -- 261.626
 table.insert(planets, jupiter)
 
 local saturn = Planet()
 saturn:setName("Saturn")
 saturn:setRevolution(10760.265)
+saturn:setPitch("E4") -- 329.628
 table.insert(planets, saturn)
 
 local uranus = Planet()
 uranus:setName("Uranus")
 uranus:setRevolution(30684.653)
+uranus:setPitch("G4") -- 391.995
 table.insert(planets, uranus)
 
 local neptune = Planet()
 neptune:setName("Neptune")
 neptune:setRevolution(60189.5475)
+neptune:setPitch("B4") -- 493.883
 table.insert(planets, neptune)
 
 function drawCurrentDayText()
@@ -111,7 +120,9 @@ function playdate.update()
 		planet:setScale(scaleFactor)
 		planet:setDays(currentDay)
 		planet:setSelected(isSelected)
+		planet:update()
 		planet:draw()
+		if autoPlay then planet:updateAudio() end
 	end
 	
 	if showUI then
@@ -146,4 +157,5 @@ end
 
 function playdate.BButtonUp()
 	showUI = not showUI
+	playPlanetAudio()
 end
