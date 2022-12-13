@@ -157,5 +157,4 @@ end
 
 function playdate.BButtonUp()
 	showUI = not showUI
-	playPlanetAudio()
 end
